@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>프로젝트</title>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+        
+    </head>
+    <body>        
+        <div class="wrapper">
+            <header>
+                <h2>로고</h2>
+                <nav>
+                    <ul class="nav_bar">
+                        <li>
+                            <a href="#">nav1</a>
+                        </li>
+                        <li>
+                            <a href="#">nav2</a>
+                        </li>
+                        <li>
+                            <a href="#">nav3</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <hr/>
+            <section>
+                <h3>Section 영역</h3>
+                <!--카카오맵 API-->
+                <div class="map_wrapper">
+                    <div id="map"></div>
+                    <div class="custom_typecontrol radius_border">
+                        <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
+                        <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
+                    </div>
+                    <div class="custom_zoomcontrol radius_border"> 
+                        <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+                        <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+                    </div>
+                </div>                
+                <article>
+                    <h2>POST 영역</h2>
+                    <p id="sample_data"></p>
+                    <p>본문입니다.</p>
+                </article>
+            </section>
+            <footer>
+                <h3>Footer 영역</h3>
+            </footer>
+        </div>
+        <script type="text/javascript" src="/apidata.js"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=LIBRARY"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services"></script>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
+        <script type="text/javascript" src="/script.js"></script>
+    </body>
+</html>
+
