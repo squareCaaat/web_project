@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Test Page</title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            table, th, td {
+                border: 1px solid black;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .filter-btn {
+                margin: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <button class="filter-btn" onclick="applyFilter('parkngAt', 'Y')">Parking Available</button>
+        <button class="filter-btn" onclick="applyFilter('cn', '음식점')">Restaurants</button>
+        <button class="filter-btn" onclick="resetFilter()">Reset Filter</button>
+        <p>Test<br/>
+            <img src="https://busan.go.kr/comm/getImage?srvcId=MULGAKIND&upperNo=2992&fileTy=IMG&fileNo=2" alt="A"/>
+        </p>
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Telephone</th>
+                    <th>Parking</th>
+                    <th>Category</th>
+                    <th>Introduction</th>
+                    <th>Image 1</th>
+                    <th>Image 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be inserted here -->
+            </tbody>
+        </table>
+        <script>
+            let originalDataMap;
+            const url = 'https://apis.data.go.kr/6260000/GoodPriceStoreService/getGoodPriceStore?serviceKey=wMPj3KtrAGElpdH4MKeC0CHjJg%2FNKvHPXd9Anmj6rjL%2Fl43xbSEbEoGGTQJOdEj6yR3XhclIs3OZtav0Lyq2Jg%3D%3D&pageNo=1&numOfRows=500&resultType=json';
+
+            function extractFieldsToMap(data, keys) {
+                const map = new Map();
+                data.forEach(item => {
+                    const subMap = new Map();
+                    keys.forEach(key => {
+                        if (item.hasOwnProperty(key)) {
+                            subMap.set(key, item[key]);
+                        }
+                    });
+                    map.set(item.idx, subMap); // 예시로 idx를 키로 사용
+                });
+                return map;
+            }
+
+            /*function insertDataToTable(map) {
+                const tbody = document.querySelector('#data-table tbody');
+                tbody.innerHTML = ''; // 기존 데이터 지우기
+                map.forEach((value, key) => {
+                    const row = document.createElement('tr');
+                    const idCell = document.createElement('td');
+                    idCell.textContent = key;
+                    row.appendChild(idCell);
+
+                    value.forEach((subValue, subKey) => {
+                        const cell = document.createElement('td');
+                        cell.textContent = subValue;
+                        row.appendChild(cell);
+                    });
+
+                    tbody.appendChild(row);
+                });
+            }*/
+            function insertDataToTable(map) {
+                const tbody = document.querySelector('#data-table tbody');
+                tbody.innerHTML = ''; // 기존 데이터 지우기
+                map.forEach((value, key) => {
+                    const row = document.createElement('tr');
+
+                    // ID
+                    const idCell = document.createElement('td');
+                    idCell.textContent = key;
+                    row.appendChild(idCell);
+
+                    // Name
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = value.get('sj');
+                    row.appendChild(nameCell);
+
+                    // Telephone
+                    const telCell = document.createElement('td');
+                    telCell.textContent = value.get('tel');
+                    row.appendChild(telCell);
+
+                    // Parking
+                    const parkingCell = document.createElement('td');
+                    parkingCell.textContent = value.get('parkngAt');
+                    row.appendChild(parkingCell);
+
+                    // Category
+                    const categoryCell = document.createElement('td');
+                    categoryCell.textContent = value.get('cn');
+                    row.appendChild(categoryCell);
+
+                    // Introduction
+                    const introCell = document.createElement('td');
+                    introCell.innerHTML = value.get('intrcn');
+                    row.appendChild(introCell);
+
+                    // Image 1
+                    const img1Cell = document.createElement('td');
+                    if (value.get('imgFile1')) {
+                        const img1 = document.createElement('img');
+                        //img1.src = 'https://' + value.get('imgFile1').replace('https://', '');
+                        img1.src = "";
+                        img1.alt = value.get('imgName1');
+                        img1.style.width = '100px';
+                        img1Cell.appendChild(img1);
+                    }
+                    row.appendChild(img1Cell);
+
+                    // Image 2
+                    const img2Cell = document.createElement('td');
+                    if (value.get('imgFile2')) {
+                        const img2 = document.createElement('img');
+                        //img2.src = 'https://' + value.get('imgFile2').replace('https://', '');
+                        img2.src = "";
+                        img2.alt = value.get('imgName2');
+                        img2.style.width = '100px';
+                        img2Cell.appendChild(img2);
+                    }
+                    row.appendChild(img2Cell);
+
+                   tbody.appendChild(row);
+               });
+            }
+
+            function applyFilter(key, value) {
+                const filteredMap = new Map();
+                originalDataMap.forEach((subMap, idx) => {
+                    if (subMap.get(key) === value) {
+                        filteredMap.set(idx, subMap);
+                    }
+                });
+                insertDataToTable(filteredMap);
+            }
+
+            // 필터링을 리셋하는 함수
+            function resetFilter() {
+                insertDataToTable(originalDataMap);
+            }
+            
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const items = data.getGoodPriceStore.body.items.item;
+                const keysToExtract = [
+                    'parkngAt', 
+                    'bsnTime', 
+                    'sj', 
+                    'mNm', 
+                    'adres', 
+                    'tel',  
+                    'cn', 
+                    'localeCd', 
+                    'locale',
+                    'intrcn',
+                    'imgFile1',
+                    'imgName1',
+                    'imgFile2',
+                    'imgName2'
+                ];
+                originalDataMap = extractFieldsToMap(items, keysToExtract);
+                insertDataToTable(originalDataMap);
+            })
+            .catch(error => console.error('Error:', error));
+        </script>
+    </body>
+</html>
+

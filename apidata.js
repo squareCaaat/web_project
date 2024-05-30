@@ -8,12 +8,17 @@ function jsonToMap(json){
     return map;
 }
 
-function extractFieldsToMap(json, keys){
+// 특정 필드만 추출하여 Map 객체로 변환하는 함수
+function extractFieldsToMap(data, keys) {
     const map = new Map();
-    keys.forEach(keys => {
-        if(json.hasOwnProperty(key)){
-            map.set(key)
-        }
+    data.forEach(item => {
+        const subMap = new Map();
+        keys.forEach(key => {
+            if (item.hasOwnProperty(key)) {
+                subMap.set(key, item[key]);
+            }
+        });
+        map.set(item.idx, subMap); // 예시로 idx를 키로 사용
     });
     return map;
 }
@@ -24,12 +29,15 @@ var dataPane = document.getElementById('sample_data');
 fetch(url)
 .then(response => response.json())
 .then(data => {
+    const item = data.getGoodPriceStore.body.items.item;
     const keysToExtract = ['parkngAt', 'bsnTime', 'idx', 'sj', 'mNm', 'adres', 'tel', 'cnCd', 'cn', 'localeCd', 'locale'];
-    const dataMap = jsonToMap(data, keysToExtract);
-    console.log(dataMap);
+    const dataMap = extractFieldsToMap(data, keysToExtract);
 
     dataMap.forEach((value, key) => {
-        console.log('${key}: ${value}');
+        console.log(`ID: ${key}`);
+        value.forEach((subValue, subKey) => {
+            console.log(` ${subKey}: ${subValue}`);
+        })
     })
 })
 .catch(error => console.error('Error:', error));
