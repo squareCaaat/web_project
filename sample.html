@@ -27,9 +27,6 @@
         <button class="filter-btn" onclick="applyFilter('parkngAt', 'Y')">Parking Available</button>
         <button class="filter-btn" onclick="applyFilter('cn', '음식점')">Restaurants</button>
         <button class="filter-btn" onclick="resetFilter()">Reset Filter</button>
-        <p>Test<br/>
-            <img src="https://busan.go.kr/comm/getImage?srvcId=MULGAKIND&upperNo=2992&fileTy=IMG&fileNo=2" alt="A"/>
-        </p>
         <table id="data-table">
             <thead>
                 <tr>
@@ -123,8 +120,7 @@
                     const img1Cell = document.createElement('td');
                     if (value.get('imgFile1')) {
                         const img1 = document.createElement('img');
-                        //img1.src = 'https://' + value.get('imgFile1').replace('https://', '');
-                        img1.src = "";
+                        img1.src = 'https://' + value.get('imgFile1').replace('https://', '');
                         img1.alt = value.get('imgName1');
                         img1.style.width = '100px';
                         img1Cell.appendChild(img1);
@@ -135,8 +131,7 @@
                     const img2Cell = document.createElement('td');
                     if (value.get('imgFile2')) {
                         const img2 = document.createElement('img');
-                        //img2.src = 'https://' + value.get('imgFile2').replace('https://', '');
-                        img2.src = "";
+                        img2.src = 'https://' + value.get('imgFile2').replace('https://', '');
                         img2.alt = value.get('imgName2');
                         img2.style.width = '100px';
                         img2Cell.appendChild(img2);
