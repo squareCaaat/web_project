@@ -38,8 +38,6 @@
             text-align: center;
         }
         .card-body {
-            background-color: #1f77b4;
-            padding: 10px;
             text-align: center;
             color: white;
         }
@@ -49,9 +47,9 @@
             text-align: center;
             color: white;
         }
-        img {
+        .card-body img{
             width: 100%;
-            height: auto;
+            height: 50%;
         }
         .container a {
             color: white;
@@ -170,34 +168,34 @@
 <body>
     <div class="wrapper">
         <header style="display: inline-block;">
-            <h2 style="display: inline;">Header</h2>
+            <h2 style="display: inline;">로고</h2>
             <nav style="display: inline-block;">
                 <ul style="list-style: none; display: inline-block;">
                     <li>
-                        <a href="#">nav1</a>
+                        <a href="#">착한가격업소란?</a>
                     </li>
                     <li>
-                        <a href="#">nav2</a>
+                        <a href="#">착한가격업소</a>
                     </li>
                 </ul>
             </nav>
         </header>
         <aside style="float:left">
-            <h3>sidebar</h3>
+            <h3>사이드바</h3>
             <div class="filters">
-                <label for="filter-parking">Parking:</label>
+                <label for="filter-parking">주차장:</label>
                 <select id="filter-parking">
-                    <option value="all">All</option>
-                    <option value="Y">Yes</option>
-                    <option value="N">No</option>
+                    <option value="all">모두</option>
+                    <option value="Y">있음</option>
+                    <option value="N">없음</option>
                 </select>
-                <label for="filter-category">Category:</label>
+                <label for="filter-category">업종:</label>
                 <select id="filter-category">
-                    <option value="all">All</option>
+                    <option value="all">모두</option>
                     <option value="음식점">음식점</option>
                     <!-- Add more categories as needed -->
                 </select>
-                <button id="apply-filters">Apply Filters</button>
+                <button id="apply-filters">필터 적용</button>
             </div>
         </aside>
         <section>
@@ -247,31 +245,42 @@
             body.className = 'card-body';
 
             const img = document.createElement('img');
-            img.src = item.imgFile1 ? `https://${item.imgFile1}` : `https://${item.imgFile2}`;
-            img.alt = item.imgFile1 ? item.imgName1 : item.imgName2;
-            body.appendChild(img);
-            card.appendChild(body);
+            if(item.imgFile1){
+                img.src = `https://${item.imgFile1}`;
+                img.alt = item.imgName1;
+                body.appendChild(img);
+                card.appendChild(body);
+            } else if(item.imgFile2){
+                img.src = `https://${item.imgFile2}`;
+                img.alt = item.imgName2;
+                body.appendChild(img);
+                card.appendChild(body);
+            } else{
+                img.src = 'media/no-image.jpg';
+                img.alt = 'no image';
+                body.appendChild(img);
+                card.appendChild(body);
+            }
 
             const footer = document.createElement('div');
             footer.className = 'card-footer';
 
             const cn = document.createElement('div');
-            cn.textContent = `Category: ${item.cn}`;
+            cn.textContent = `${item.cn}`;
             footer.appendChild(cn);
 
             const tel = document.createElement('div');
-            tel.textContent = `Tel: ${item.tel}`;
+            tel.textContent = item.tel? `Tel: ${item.tel}` : 'Tel: 없음';
             footer.appendChild(tel);
 
             const adres = document.createElement('div');
-            const adresLink = document.createElement('a');
-            adresLink.href = '#';
-            adresLink.textContent = item.adres;
-            adres.appendChild(adresLink);
+            adres.textContent = `${item.adres}`;
             footer.appendChild(adres);
 
             const intrcn = document.createElement('div');
+            let line = document.createElement('hr');
             intrcn.innerHTML = item.intrcn;
+            footer.appendChild(line);
             footer.appendChild(intrcn);
 
             card.appendChild(footer);
