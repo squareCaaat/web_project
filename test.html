@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Grid Layout with Filters</title>
     <style>
+        /*normalization*/
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,10 +14,65 @@
             flex-direction: column;
             align-items: center;
         }
+        a{
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+        }
+        h1,h2,h3,h4,h5,h6{
+            margin: 0;
+            padding: 0;
+            display: inline;
+        }
+        /*header*/
+        header{
+            display: inline-block;
+            width: 100%;
+            border-bottom: 1px solid black;
+        }
+        nav li{
+            display: inline-block;
+            padding: 10px 5px;
+        }
+        /*side bar*/
+        aside{
+            width: 0;
+            height: 100%;
+            position: fixed;
+            border-right: 1px solid black;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: 0.5s;
+        }
+        #closebtn{
+            position: absolute;
+            top: 0;
+            right: 10px;
+            font-size: inherit;
+            display: inline-block;
+            transition-duration: 0.3s;
+        }
+
+        .filters {
+            margin: 20px;
+        }
+        .filters label {
+            margin-right: 10px;
+        }
+        .filters select{
+            display: block;
+        }
+        /*section*/
+        #main{
+            margin-left: 0;
+        }
         section{
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: margin-left .5s;
         }
         .container {
             width: 90%;
@@ -32,54 +88,23 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .card-header {
-            background-color: #ff7f0e;
-            color: white;
+            background-color: lightblue;
             padding: 10px;
+            font-weight: bold;
             text-align: center;
-        }
-        .card-body {
-            text-align: center;
-            color: white;
-        }
-        .card-footer {
-            background-color: #2ca02c;
-            padding: 10px;
-            text-align: center;
-            color: white;
         }
         .card-body img{
             width: 100%;
-            height: 50%;
+            height: 13vh;
         }
-        .container a {
-            color: white;
-            text-decoration: underline;
-        }
-        .filters {
-            margin: 20px;
-        }
-        .filters label {
-            margin-right: 10px;
-        }
-        .filters select{
-            display: block;
-        }
-        header{
-            display: inline-block;
-            width: 100%;
-            border-bottom: 1px solid black;
-        }
-        nav li{
-            display: inline-block;
-        }
-        aside{
+        .card-footer {
             height: 100%;
-            border-right: 1px solid black;
+            background-color: beige;
+            padding: 10px;
+            text-align: center;
         }
-        aside h3{
-            margin: 0;
-            padding: 0;
-        }
+        
+        /*map*/
         #map{
             position: relative;
             width: 100%;
@@ -167,21 +192,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <header style="display: inline-block;">
-            <h2 style="display: inline;">로고</h2>
-            <nav style="display: inline-block;">
-                <ul style="list-style: none; display: inline-block;">
-                    <li>
-                        <a href="#">착한가격업소란?</a>
-                    </li>
-                    <li>
-                        <a href="#">착한가격업소</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-        <aside style="float:left">
-            <h3>사이드바</h3>
+        <aside id="sidebar">
+            <h3 style="display: block;">검색 및 필터
+                <a href="" class="closebtn" id="closebtn" onclick="closeBar()">&times;</a>
+            </h3>
+            <label for="searchbar">검색:</label>
+            <input type="text"/>
             <div class="filters">
                 <label for="filter-parking">주차장:</label>
                 <select id="filter-parking">
@@ -198,25 +214,41 @@
                 <button id="apply-filters">필터 적용</button>
             </div>
         </aside>
-        <section>
-            <div class="map_wrapper">
-                <div id="map"></div>
-                <div class="custom_typecontrol radius_border">
-                    <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
-                    <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
+        <div id="main">
+            <header style="display: inline-block;">
+                <span id="openbtn" style="font-size: 24px;cursor: pointer;" onclick="openBar()">&#9776</span>
+                <h2 style="display: inline;">로고</h2>
+                <nav style="display: inline-block;">
+                    <ul style="list-style: none; display: inline-block;">
+                        <li>
+                            <a href="#">착한가격업소란?</a>
+                        </li>
+                        <li>
+                            <a href="#">착한가격업소</a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <section>
+                <div class="map_wrapper">
+                    <div id="map"></div>
+                    <div class="custom_typecontrol radius_border">
+                        <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
+                        <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
+                    </div>
+                    <div class="custom_zoomcontrol radius_border"> 
+                        <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+                        <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+                    </div>
                 </div>
-                <div class="custom_zoomcontrol radius_border"> 
-                    <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
-                    <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+                <div class="container" id="data-container">
+                    <!-- Cards will be inserted here -->
                 </div>
-            </div>
-            <div class="container" id="data-container">
-                <!-- Cards will be inserted here -->
-            </div>
-        </section>
-        <footer>
-            <h3>End of Page</h3>
-        </footer>
+            </section>
+            <footer>
+                <h3>End of Page</h3>
+            </footer>
+        </div>
     </div>
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe"></script>
@@ -230,6 +262,18 @@
                     await fetch('https://apis.data.go.kr/6260000/GoodPriceStoreService/getGoodPriceStore?serviceKey=wMPj3KtrAGElpdH4MKeC0CHjJg%2FNKvHPXd9Anmj6rjL%2Fl43xbSEbEoGGTQJOdEj6yR3XhclIs3OZtav0Lyq2Jg%3D%3D&pageNo=1&numOfRows=500&resultType=json');
             const data = await response.json();
             return data.getGoodPriceStore.body.items.item; // Adjust based on your API structure
+        }
+
+        function openBar(){
+            document.getElementById('sidebar').style.width = '250px';
+            document.getElementById('main').style.marginLeft = '250px';
+            document.getElementById('openbtn').style.display = 'none';
+        }
+
+        function closeBar(){
+            document.getElementById('sidebar').style.width = '0';
+            document.getElementById('main').style.marginLeft = '0';
+            document.getElementById('openbtn').style.display = 'inline';
         }
 
         function createCard(item) {
