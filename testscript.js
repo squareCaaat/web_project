@@ -1,11 +1,4 @@
-//openAPI implementaion
-async function fetchData() {
-    const response = 
-            await fetch('https://apis.data.go.kr/6260000/GoodPriceStoreService/getGoodPriceStore?serviceKey=wMPj3KtrAGElpdH4MKeC0CHjJg%2FNKvHPXd9Anmj6rjL%2Fl43xbSEbEoGGTQJOdEj6yR3XhclIs3OZtav0Lyq2Jg%3D%3D&pageNo=1&numOfRows=500&resultType=json');
-    const data = await response.json();
-    return data.getGoodPriceStore.body.items.item; // Adjust based on your API structure
-}
-
+//css control
 function openBar(){
     document.getElementById('sidebar').style.width = '250px';
     document.getElementById('main').style.marginLeft = '250px';
@@ -16,6 +9,14 @@ function closeBar(){
     document.getElementById('sidebar').style.width = '0';
     document.getElementById('main').style.marginLeft = '0';
     document.getElementById('openbtn').style.display = 'inline';
+}
+
+//openAPI implementaion
+async function fetchData() {
+    const response = 
+            await fetch('https://apis.data.go.kr/6260000/GoodPriceStoreService/getGoodPriceStore?serviceKey=wMPj3KtrAGElpdH4MKeC0CHjJg%2FNKvHPXd9Anmj6rjL%2Fl43xbSEbEoGGTQJOdEj6yR3XhclIs3OZtav0Lyq2Jg%3D%3D&pageNo=1&numOfRows=500&resultType=json');
+    const data = await response.json();
+    return data.getGoodPriceStore.body.items.item; // Adjust based on your API structure
 }
 
 function createCard(item) {
@@ -65,10 +66,13 @@ function createCard(item) {
 
     const intrcn = document.createElement('div');
     let line = document.createElement('hr');
-    intrcn.innerHTML = item.intrcn;
-    footer.appendChild(line);
-    footer.appendChild(intrcn);
-
+    intrcn.className = 'introduction';
+    if(item.intrcn != null){
+        intrcn.innerHTML = item.intrcn;
+        intrcn.style.overflow = 'scroll';
+        footer.appendChild(line);
+        footer.appendChild(intrcn);
+    }
     card.appendChild(footer);
 
     return card;
@@ -179,4 +183,23 @@ kakao.maps.event.addListener(marker, 'mouseover', function() {
 kakao.maps.event.addListener(marker, 'mouseout', function() {
     // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
     infowindow.close();
+});
+
+// 지도를 표시하는 div 크기를 변경하는 함수입니다
+function resizeMap() {
+    var mapContainer = document.getElementById('map');
+    mapContainer.style.width = '100%';
+    mapContainer.style.height = '30vh'; 
+}
+
+function relayout() {    
+    
+    // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
+    // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다 
+    // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
+    map.relayout();
+}
+window.addEventListener('DOMContentLoaded', (event) => {
+    map.relayout();
+    map.setCenter(35.18003483348194, 129.07493819187425);
 });
