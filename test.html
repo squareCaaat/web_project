@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,11 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        section{
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -48,7 +53,7 @@
             width: 100%;
             height: auto;
         }
-        a {
+        .container a {
             color: white;
             text-decoration: underline;
         }
@@ -58,28 +63,169 @@
         .filters label {
             margin-right: 10px;
         }
+        .filters select{
+            display: block;
+        }
+        header{
+            display: inline-block;
+            width: 100%;
+            border-bottom: 1px solid black;
+        }
+        nav li{
+            display: inline-block;
+        }
+        aside{
+            height: 100%;
+            border-right: 1px solid black;
+        }
+        aside h3{
+            margin: 0;
+            padding: 0;
+        }
+        #map{
+            position: relative;
+            width: 100%;
+            height: 30em;
+            overflow: hidden;
+        }
+        .map_wrapper{
+            position: relative;
+            overflow: hidden;
+            width: 80%;
+            height: 30em;
+        }
+
+        .radius_border{
+            border: 1px solid #919191;
+            border-radius: 5px;
+        }
+
+        .custom_typecontrol {
+            position:absolute;
+            top:10px;
+            right:10px;
+            overflow:hidden;
+            width:130px;
+            height:30px;
+            margin:0;
+            padding:0;
+            z-index:1;
+            font-size:12px;
+            font-family:'Malgun Gothic', '맑은 고딕', sans-serif;
+        }
+        .custom_typecontrol span {
+            display:block;
+            width:65px;
+            height:30px;
+            float:left;
+            text-align:center;
+            line-height:30px;
+            cursor:pointer;
+        }
+        .custom_typecontrol .btn {
+            background:#fff;
+            background:linear-gradient(#fff,  #e6e6e6);
+        }       
+        .custom_typecontrol .btn:hover {
+            background:#f5f5f5;
+            background:linear-gradient(#f5f5f5,#e3e3e3);
+        }
+        .custom_typecontrol .btn:active {
+            background:#e6e6e6;
+            background:linear-gradient(#e6e6e6, #fff);
+        }    
+        .custom_typecontrol .selected_btn {
+            color:#fff;background:#425470;
+            background:linear-gradient(#425470, #5b6d8a);
+        }
+        .custom_typecontrol .selected_btn:hover {color:#fff;}   
+        .custom_zoomcontrol {
+            position:absolute;
+            top: 24em;
+            right:10px;
+            width:36px;
+            height:80px;
+            overflow:hidden;
+            z-index:1;
+            background-color:#f5f5f5;
+        } 
+        .custom_zoomcontrol span {
+            display:block;
+            width:36px;
+            height:40px;
+            text-align:center;
+            cursor:pointer;
+        }     
+        .custom_zoomcontrol span img {
+            width:1rem;
+            height:1rem;
+            padding:1rem 0;
+            border:none;
+        }             
+        .custom_zoomcontrol span:first-child{
+            border-bottom:1px solid #bfbfbf;
+        }
     </style>
 </head>
 <body>
-    <div class="filters">
-        <label for="filter-parking">Parking:</label>
-        <select id="filter-parking">
-            <option value="all">All</option>
-            <option value="Y">Yes</option>
-            <option value="N">No</option>
-        </select>
-        <label for="filter-category">Category:</label>
-        <select id="filter-category">
-            <option value="all">All</option>
-            <option value="음식점">음식점</option>
-            <!-- Add more categories as needed -->
-        </select>
-        <button id="apply-filters">Apply Filters</button>
-    </div>
-    <div class="container" id="data-container">
-        <!-- Cards will be inserted here -->
+    <div class="wrapper">
+        <header style="display: inline-block;">
+            <h2 style="display: inline;">Header</h2>
+            <nav style="display: inline-block;">
+                <ul style="list-style: none; display: inline-block;">
+                    <li>
+                        <a href="#">nav1</a>
+                    </li>
+                    <li>
+                        <a href="#">nav2</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        <aside style="float:left">
+            <h3>sidebar</h3>
+            <div class="filters">
+                <label for="filter-parking">Parking:</label>
+                <select id="filter-parking">
+                    <option value="all">All</option>
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+                <label for="filter-category">Category:</label>
+                <select id="filter-category">
+                    <option value="all">All</option>
+                    <option value="음식점">음식점</option>
+                    <!-- Add more categories as needed -->
+                </select>
+                <button id="apply-filters">Apply Filters</button>
+            </div>
+        </aside>
+        <section>
+            <div class="map_wrapper">
+                <div id="map"></div>
+                <div class="custom_typecontrol radius_border">
+                    <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
+                    <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
+                </div>
+                <div class="custom_zoomcontrol radius_border"> 
+                    <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+                    <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+                </div>
+            </div>
+            <div class="container" id="data-container">
+                <!-- Cards will be inserted here -->
+            </div>
+        </section>
+        <footer>
+            <h3>End of Page</h3>
+        </footer>
     </div>
 
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=LIBRARY"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
+    <script type="text/javascript" src="/script.js"></script>
     <script>
         async function fetchData() {
             const response = 
