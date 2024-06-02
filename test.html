@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Grid Layout with Filters</title>
     <link href="testcss.css" rel="stylesheet" />
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe&libraries=LIBRARY&libraries=services,clusterer,drawing"></script>
 </head>
 <body>
     <div class="wrapper">
         <aside id="sidebar">
             <h3 style="display: block;">검색 및 필터
-                <a href="" class="closebtn" id="closebtn" onclick="closeBar()">&times;</a>
+                <span class="closebtn" id="closebtn" style="cursor: pointer;" onclick="closeBar()">&times;</span>
             </h3>
             <label for="searchbar">검색:</label>
-            <input type="text"/>
+            <input id="searchbar" type="text"/>
             <div class="filters">
                 <label for="filter-parking">주차장:</label>
                 <select id="filter-parking">
@@ -66,7 +67,6 @@
             </footer>
         </div>
     </div>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe&libraries=LIBRARY&libraries=services,clusterer,drawing"></script>
     <script type="text/javascript" src="/testscript.js"></script>
 </body>
 </html>
