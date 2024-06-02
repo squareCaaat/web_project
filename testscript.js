@@ -48,25 +48,30 @@ marker.setMap(map);
     marker.setPosition(latlng);
 }); */
 
-// 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
-var iwContent = '<div style="padding:5px;">상점이름</div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+// 주소-좌표 변환 객체를 생성합니다
+var geocoder = new kakao.maps.services.Geocoder();
 
-// 인포윈도우를 생성합니다
-var infowindow = new kakao.maps.InfoWindow({
-    content : iwContent
-});
+// 주소로 좌표를 검색합니다
+geocoder.addressSearch('제주특별자치도 제주시 첨단로 242', function(result, status) {
 
-// 마커에 마우스오버 이벤트를 등록합니다
-kakao.maps.event.addListener(marker, 'mouseover', function() {
-  // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
-    infowindow.open(map, marker);
-});
+    // 정상적으로 검색이 완료됐으면 
+     if (status === kakao.maps.services.Status.OK) {
 
-// 마커에 마우스아웃 이벤트를 등록합니다
-kakao.maps.event.addListener(marker, 'mouseout', function() {
-    // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
-    infowindow.close();
-});
+        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // 결과값으로 받은 위치를 마커로 표시합니다
+        var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+        });
+
+        // 인포윈도우로 장소에 대한 설명을 표시합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+        });
+        infowindow.open(map, marker);
+    } 
+});    
 
 function relayout() {    
     
@@ -168,6 +173,47 @@ function displayData(data) {
         container.appendChild(card);
     });
 }
+var markers = [];
+//지도에 해당 업체의 위치르 마커로 찍기
+function putMarkMap(data){
+    // 주소로 좌표를 검색합니다
+    data.forEach((item)=>{
+        geocoder.addressSearch(item.adres, function(result, status) {
+            // 정상적으로 검색이 완료됐으면 
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                markers.push(marker);
+
+                // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+                var iwContent = `<div style="width:150px;text-align:center;padding:6px 0;">${item.sj}</div>`;
+
+                // 인포윈도우를 생성합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    content : iwContent
+                });
+
+                // 마커에 마우스오버 이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'mouseover', function() {
+                // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                    infowindow.open(map, marker);
+                });
+
+                // 마커에 마우스아웃 이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'mouseout', function() {
+                    // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                    infowindow.close();
+                });
+            } 
+        });
+    });
+    marker.getMap();
+}
 
 function applyFilters(data) {
     const parkingFilter = document.getElementById('filter-parking').value;
@@ -182,11 +228,12 @@ function applyFilters(data) {
     if (categoryFilter !== 'all') {
         filteredData = filteredData.filter(item => item.cn === categoryFilter);
     }
-
+    putMarkMap(filteredData);
     displayData(filteredData);
 }
 
 document.getElementById('apply-filters').addEventListener('click', () => {
+    markers.forEach((mark)=>{mark.setMap(null)});
     fetchData().then(data => {
         applyFilters(data);
     });
@@ -194,6 +241,7 @@ document.getElementById('apply-filters').addEventListener('click', () => {
 
 // Initial load
 fetchData().then(data => {
+    putMarkMap(data);
     displayData(data);
     relayout();
 });
