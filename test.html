@@ -13,8 +13,8 @@
             <h3 style="display: block;">검색 및 필터
                 <span class="closebtn" id="closebtn" style="cursor: pointer;" onclick="closeBar()">&times;</span>
             </h3>
-            <label for="searchbar">검색:</label>
-            <input id="searchbar" type="text"/>
+            <input id="store_name" type="text"/>
+            <button id="searchbtn">검색</button>
             <div class="filters">
                 <label for="filter-parking">주차장:</label>
                 <select id="filter-parking">
@@ -32,9 +32,9 @@
             </div>
         </aside>
         <div id="main">
-            <header style="display: inline-block;">
+            <header>
                 <span id="openbtn" style="font-size: 24px;cursor: pointer;" onclick="openBar()">&#9776</span>
-                <h2 style="display: inline;">로고</h2>
+                <h2 id="logo">로고</h2>
                 <nav style="display: inline-block;">
                     <ul>
                         <li>
@@ -58,8 +58,10 @@
                         <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
                     </div>
                 </div>
-                <div class="container" id="data-container">
-                    <!-- Cards will be inserted here -->
+                <div class="container_wrapper">
+                    <div class="container" id="data-container">
+                        <!-- Cards will be inserted here -->
+                    </div>
                 </div>
             </section>
             <footer>

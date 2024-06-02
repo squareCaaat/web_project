@@ -29,52 +29,10 @@ function zoomOut() {
     map.setLevel(map.getLevel() + 1);
 }
 
-// 지도를 클릭한 위치에 표출할 마커입니다
-var marker = new kakao.maps.Marker({ 
-    // 지도 중심좌표에 마커를 생성합니다 
-    position: map.getCenter() 
-}); 
-// 지도에 마커를 표시합니다
-marker.setMap(map);
-
-// 지도에 클릭 이벤트를 등록합니다
-// 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-/*kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-    
-    // 클릭한 위도, 경도 정보를 가져옵니다 
-    var latlng = mouseEvent.latLng; 
-    
-    // 마커 위치를 클릭한 위치로 옮깁니다
-    marker.setPosition(latlng);
-}); */
-
 // 주소-좌표 변환 객체를 생성합니다
 var geocoder = new kakao.maps.services.Geocoder();
 
-// 주소로 좌표를 검색합니다
-geocoder.addressSearch('제주특별자치도 제주시 첨단로 242', function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면 
-     if (status === kakao.maps.services.Status.OK) {
-
-        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-        // 결과값으로 받은 위치를 마커로 표시합니다
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-        // 인포윈도우로 장소에 대한 설명을 표시합니다
-        var infowindow = new kakao.maps.InfoWindow({
-            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
-        });
-        infowindow.open(map, marker);
-    } 
-});    
-
 function relayout() {    
-    
     // 지도를 표시하는 div 크기를 변경한 이후 지도가 정상적으로 표출되지 않을 수도 있습니다
     // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다 
     // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
@@ -173,11 +131,16 @@ function displayData(data) {
         container.appendChild(card);
     });
 }
+
+//handle map marker
 var markers = [];
 //지도에 해당 업체의 위치르 마커로 찍기
+// 주소로 좌표를 검색합니다
 function putMarkMap(data){
-    // 주소로 좌표를 검색합니다
     data.forEach((item)=>{
+        if(item.adres.indexOf('부산') == -1){
+            item.adres = '부산 ' + item.adres;
+        }
         geocoder.addressSearch(item.adres, function(result, status) {
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
@@ -209,12 +172,15 @@ function putMarkMap(data){
                     // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
                     infowindow.close();
                 });
+                if(data.length == 1){
+                    map.setCenter(coords);
+                }
             } 
         });
     });
-    marker.getMap();
 }
 
+//handle filter
 function applyFilters(data) {
     const parkingFilter = document.getElementById('filter-parking').value;
     const categoryFilter = document.getElementById('filter-category').value;
@@ -238,6 +204,21 @@ document.getElementById('apply-filters').addEventListener('click', () => {
         applyFilters(data);
     });
 });
+
+//handle search
+function searchStore(data){
+    const searchText = document.getElementById('store_name').value;
+    const filteredData = data.filter(item => item.sj.includes(searchText));
+    markers.forEach((mark)=>{mark.setMap(null)});
+    putMarkMap(filteredData);
+    displayData(filteredData);
+}
+
+document.getElementById('searchbtn').addEventListener('click', () => {
+    fetchData().then(data => {
+        searchStore(data);
+    })
+})
 
 // Initial load
 fetchData().then(data => {
