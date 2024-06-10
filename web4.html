@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Test</title>
+    <link rel="stylesheet" href="cssWeb3.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a id="logo" href=""><img src="media/goodpricelogo.png" width="100" height="inherit" alt="goodpricelogo"></a>
+        </div>
+        <div class="header-main">
+            <h4><strong>부산 착한가격업소</strong></h4>
+        </div>
+    </header>
+    <div class="guide-container">
+        <div class="guide">
+            <a href="https://www.goodprice.go.kr/introduce/consumer.do"><h4><span>착한식당이란?</span></h4></a>
+        </div>
+        <div class="guide">
+            <h4><span>안내사항</span></h4>
+        </div>
+    </div>
+    <nav>
+        <div class="slider">
+            <div class="slide"></div>
+            <div class="slide"></div>
+            <div class="slide"></div>
+        </div>
+    </nav>
+    <div class="content-container">
+        <aside class="aside1">
+            <h3>필터 기능</h3>
+            <div class="filter-options">
+                <h4 id="line"><strong>구(군) / 동 / 카테고리</strong></h4>
+                <select name="구(군)">
+                    <option disabled selected>구(군)</option>
+                    <option value="강서구">강서구</option>
+                    <option value="사상구">사상구</option>
+                    <option value="사하구">사하구</option>
+                    <option value="북구">북구</option>
+                    <option value="금정구">금정구</option>
+                    <option value="동래구">동래구</option>
+                    <option value="연제구">연제구</option>
+                    <option value="진구">진구</option>
+                    <option value="서구">서구</option>
+                    <option value="동구">동구</option>
+                    <option value="중구">중구</option>
+                    <option value="영도구">영도구</option>
+                    <option value="남구">남구</option>
+                    <option value="수영구">수영구</option>
+                    <option value="해운대구">해운대구</option>
+                    <option value="기장군">기장군</option>
+                </select>
+                <select name="읍면동">
+                    <option disabled selected>읍면동</option>
+                    <option value="남천동">남천동</option>
+                    <option value="대연동">대연동</option>
+                    <option value="화명동">화명동</option>
+                    <option value="남포동">남포동</option>
+                </select>
+                <select name="카테고리">
+                    <option disabled selected>카테고리</option>
+                    <option value="한식">한식</option>
+                    <option value="양식">양식</option>
+                    <option value="중식">중식</option>
+                    <option value="일식">일식</option>
+                </select>
+                <div>
+                    <label for="parkchk">주차장</label>
+                    <input id="parkchk" style="display: inline-block;" type="checkbox" value="Y">
+                </div>
+            </div>
+            <form>
+                <input type="text" placeholder="검색어 입력">
+                <button type="button" id="searchbtn">검색</button>
+            </form>
+        </aside>
+        <section>
+            <div class="map_wrapper">
+                <div id="map"></div>
+                <div class="custom_typecontrol radius_border">
+                    <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
+                    <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
+                </div>
+                <div class="custom_zoomcontrol radius_border"> 
+                    <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+                    <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+                </div>
+            </div>
+            <article>
+                <span>본문</span>
+            </article>
+        </section>
+        <aside class="aside2">
+            <h4 id="line">추천 팝업 기능 구현</h4>
+        </aside>
+    </div>
+    <footer>
+        <div>End of Page</div>
+    </footer>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe&libraries=LIBRARY&libraries=services,clusterer,drawing"></script>
+    <script type="text/javascript" src="webjs.js"></script>
+</body>
+</html>
