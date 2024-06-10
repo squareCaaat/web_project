@@ -22,7 +22,7 @@ header {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.header-container {
+.header-logo {
     display: flex;
     align-items: center;
 }
@@ -32,6 +32,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 30px;
 }
 
 .header-main h4 {
@@ -174,10 +175,26 @@ input {
     flex-grow: 1;
 }
 
-#parkchk{
+.radio-wrapper{
+    margin: 0;
+    padding: 10px 0;
+    border: none;
+}
+.radiolb{
+    margin:0;
+    padding:0;
+    transition: none;
+}
+.radiolb:hover{
+    font-size: inherit;
+}
+.parkrd{
+    display: inline;
     margin: 0;
     padding: 0;
+    width: 20px;
 }
+
 
 #searchbtn {
     width: 50px;

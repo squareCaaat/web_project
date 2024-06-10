@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Test</title>
     <link rel="stylesheet" href="cssWeb3.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 <body>
     <header>
-        <div class="header-container">
+        <div class="header-logo">
             <a id="logo" href=""><img src="media/goodpricelogo.png" width="100" height="inherit" alt="goodpricelogo"></a>
         </div>
         <div class="header-main">
@@ -34,9 +35,9 @@
         <aside class="aside1">
             <h3>필터 기능</h3>
             <div class="filter-options">
-                <h4 id="line"><strong>구(군) / 동 / 카테고리</strong></h4>
-                <select name="구(군)">
-                    <option disabled selected>구(군)</option>
+                <h4 id="line"><strong>구(군)</strong></h4>
+                <select id="region" name="region">
+                    <option value="모두" selected>모두</option>
                     <option value="강서구">강서구</option>
                     <option value="사상구">사상구</option>
                     <option value="사하구">사하구</option>
@@ -54,24 +55,63 @@
                     <option value="해운대구">해운대구</option>
                     <option value="기장군">기장군</option>
                 </select>
-                <select name="읍면동">
-                    <option disabled selected>읍면동</option>
+                <h4 id="line"><strong>읍면동</strong></h4>
+                <select id="district" name="district">
+                    <option value="모두" selected>모두</option>
                     <option value="남천동">남천동</option>
                     <option value="대연동">대연동</option>
                     <option value="화명동">화명동</option>
                     <option value="남포동">남포동</option>
                 </select>
-                <select name="카테고리">
-                    <option disabled selected>카테고리</option>
-                    <option value="한식">한식</option>
-                    <option value="양식">양식</option>
-                    <option value="중식">중식</option>
-                    <option value="일식">일식</option>
+                <h4 id="line"><strong>업종</strong></h4>
+                <select id="category" name="category" onchange="categoryHandler(value)">
+                    <option value="모두" selected>모두</option>
+                    <option value="음식점">음식점</option>
+                    <option value="기타서비스업">기타서비스업</option>
+                    <option value="목욕업">목욕업</option>
+                    <option value="세탁업">세탁업</option>
+                    <option value="숙박업">숙박업</option>
+                    <option value="이미용업">이미용업</option>
                 </select>
-                <div>
-                    <label for="parkchk">주차장</label>
-                    <input id="parkchk" style="display: inline-block;" type="checkbox" value="Y">
+                <div id="fcategory" style="display: none;" >
+                    <h4 id="line"><strong>음식 종류</strong></h4>
+                    <select id="food-category" name="food-category" onchange="foodHandler(value)">
+                        <option value="모두" selected>모두</option>
+                        <option value="한식">한식</option>
+                        <option value="양식">양식</option>
+                        <option value="중식">중식</option>
+                        <option value="일식">일식</option>
+                        <option value="카페">카페/디저트</option>
+                    </select>
                 </div>
+                <div id="kdetail" style="display: none;">
+                    <h4 id="line"><strong>한식 세부</strong></h4>
+                    <select id="korean-detail" name="korean-detail">
+                        <option value="모두" selected>모두</option>
+                        <option value="일반">일반</option>
+                        <option value="한정식">한정식</option>
+                        <option value="찌개류">찌개류</option>
+                        <option value="면류">면류</option>
+                        <option value="육류">육류</option>
+                        <option value="분식">분식</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+                <h4 id="line"><strong id="parkrd-label">주차장</strong></h4>
+                <fieldset class="radio-wrapper">
+                    <label>
+                        <input type="radio" class="parkrd" id="parkA" name="park" value="A" checked>
+                        <span class="radiolb">모두</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="parkrd" id="parkY" name="park" value="Y">
+                        <span class="radiolb">있음</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="parkrd" id="parkN" name="park" value="N">
+                        <span class="radiolb">없음</span>
+                    </label>
+                </fieldset>
             </div>
             <form>
                 <input type="text" placeholder="검색어 입력">
@@ -90,13 +130,15 @@
                     <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
                 </div>
             </div>
-            <article>
-                <span>본문</span>
-            </article>
         </section>
         <aside class="aside2">
             <h4 id="line">추천 팝업 기능 구현</h4>
         </aside>
+    </div>
+    <div class="data-wrapper">
+        <div id="data-container">
+            <!--Data will be show here-->
+        </div>
     </div>
     <footer>
         <div>End of Page</div>
