@@ -14,10 +14,12 @@ function setMapType(maptype) {
         map.setMapTypeId(kakao.maps.MapTypeId.ROADMAP);    
         roadmapControl.className = 'selected_btn';
         skyviewControl.className = 'btn';
+        relayout();
     } else {
         map.setMapTypeId(kakao.maps.MapTypeId.HYBRID);    
         skyviewControl.className = 'selected_btn';
         roadmapControl.className = 'btn';
+        relayout();
     }
 }
 // 줌 인/아웃
@@ -37,7 +39,6 @@ function relayout() {
     // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다 
     // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
     map.relayout();
-    map.setCenter(new kakao.maps.LatLng(35.18003483348194, 129.07493819187425));
 }
 
 //css control
@@ -67,6 +68,7 @@ function createCard(item) {
 
     const header = document.createElement('div');
     header.className = 'card-header';
+    header.id = `${item.idx}`;
     header.textContent = item.sj;
     card.appendChild(header);
 
