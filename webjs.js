@@ -72,7 +72,61 @@ $.ajax({
 }).done(successFunction);
 
 //marker handler
-var markers = [];
+let markers = [];
+function putMarkMap(){
+    //marker initialization
+    originData.forEach((item)=>{
+        var coordmap = {};
+        if(item.adres.indexOf('부산') == -1){
+            item.adres = '부산 ' + item.adres;
+        }
+        coordmap.sj = item.sj; 
+        geocoder.addressSearch(item.adres, function(result, status) {
+            // 정상적으로 검색이 완료됐으면 
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                var marker = new kakao.maps.Marker({
+                    position: coords
+                });
+                coordmap.marker = marker;
+                markers.push(coordmap);
+                
+                // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+                var iwContent = `<div style="width:150px;text-align:center;padding:6px 0;">${item.sj}</div>`;
+
+                // 인포윈도우를 생성합니다
+                var infowindow = new kakao.maps.InfoWindow({
+                    content : iwContent
+                });
+
+                // 마커에 마우스오버 이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'mouseover', function() {
+                // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                    infowindow.open(map, marker);
+                });
+
+                // 마커에 마우스아웃 이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'mouseout', function() {
+                    // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                    infowindow.close();
+                });
+            } 
+        });
+    });
+    console.log('set marker');
+}
+
+function showMarker(){
+    markers.forEach((el)=>{
+        el.marker.setMap(map);
+    });
+    console.log('put marker');
+}
+
+//filter handler
+let filterData = [];
 
 //DOM handler
 function showData(value){
@@ -230,6 +284,9 @@ fetch(apiUrl)
         originData = tmpData;
 })
 .then(()=>{
-    console.log(originData);
+    //console.log(originData);
+    putMarkMap();
+    console.log(markers);
+    showMarker();
 })
 .catch((error) =>{console.log('Error:', error)});
