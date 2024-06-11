@@ -43,7 +43,7 @@ function relayout() {
 //openAPI implementaion
 const apiUrl = 'https://apis.data.go.kr/6260000/GoodPriceStoreService/getGoodPriceStore?serviceKey=wMPj3KtrAGElpdH4MKeC0CHjJg%2FNKvHPXd9Anmj6rjL%2Fl43xbSEbEoGGTQJOdEj6yR3XhclIs3OZtav0Lyq2Jg%3D%3D&pageNo=1&numOfRows=650&resultType=json';
 let originData;
-let originCsv = new Array();
+let originCsv = [];
 
 //csv parsing
 function successFunction(fdata){
@@ -62,7 +62,8 @@ function successFunction(fdata){
         if(row != 0){
             originCsv.push(jsoncell);
         }
-    }    
+    }
+    console.log('csv init complete');
 }
 
 //read csv
@@ -71,30 +72,33 @@ $.ajax({
     dataType: 'text'
 }).done(successFunction);
 
+//settimeout
+
+
 //marker handler
 let markers = [];
-function putMarkMap(){
+async function setMarker(){
     //marker initialization
     originData.forEach((item)=>{
         var coordmap = {};
+        var tmpadres = item.adres;
         if(item.adres.indexOf('부산') == -1){
-            item.adres = '부산 ' + item.adres;
+            // item.adres = '부산 ' + item.adres;
+            tmpadres = '부산 ' + item.adres;
         }
         coordmap.sj = item.sj; 
-        geocoder.addressSearch(item.adres, function(result, status) {
+        geocoder.addressSearch(tmpadres, function(result, status) {
             // 정상적으로 검색이 완료됐으면 
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                // 결과값으로 받은 위치를 마커로 표시합니다
+                
+                // 결과값으로 받은 위치를 마커 객체에 저장
                 var marker = new kakao.maps.Marker({
                     position: coords
                 });
-                coordmap.marker = marker;
-                markers.push(coordmap);
-                
+
                 // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
-                var iwContent = `<div style="width:150px;text-align:center;padding:6px 0;">${item.sj}</div>`;
+                var iwContent = `<div style="width:150px;text-align:center;padding:6px 0;">${item.sj}<br/>${item.adres}</div>`;
 
                 // 인포윈도우를 생성합니다
                 var infowindow = new kakao.maps.InfoWindow({
@@ -112,26 +116,35 @@ function putMarkMap(){
                     // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
                     infowindow.close();
                 });
-            } 
+                
+                kakao.maps.event.addListener(marker, 'click', ()=>{showStoreData(item.adres)});
+
+                coordmap.marker = marker;
+                markers.push(coordmap);
+            } else{
+                console.log(item.sj);
+            }
         });
     });
-    console.log('set marker');
 }
 
-function showMarker(){
+function showAllMarker(){
     markers.forEach((el)=>{
         el.marker.setMap(map);
     });
-    console.log('put marker');
 }
 
 //filter handler
 let filterData = [];
 
 //DOM handler
-function showData(value){
+function showCateData(value){
     const dcontainer = document.getElementById('data-container');
     dcontainer.innerHTML = '';
+    if(value == -1){
+        dcontainer.innerHTML = '';
+        return;
+    }
     if(value === '음식점'){
         originData.forEach((element)=>{
             if(element.cn === '음식점'){
@@ -147,6 +160,18 @@ function showData(value){
             }
         });
     }  
+}
+
+function showStoreData(value){
+    const dcontainer = document.getElementById('data-container');
+    dcontainer.innerHTML = '';
+    originData.forEach((element)=>{
+        if(element.adres === value){
+            const card = createDC(element);
+            dcontainer.appendChild(card);
+            return;
+        }
+    })
 }
 
 function createDC(item){
@@ -237,17 +262,19 @@ function categoryHandler(value){
     }
     if(value == '음식점'){
         divFood.style.display = 'block';
-        showData(value);
+        showCateData(value);
     } else if(value == '숙박업'){
-        showData(value);
+        showCateData(value);
     } else if(value == '목욕업'){
-        showData(value);
+        showCateData(value);
     } else if(value == '세탁업'){
-        showData(value);
+        showCateData(value);
     } else if(value == '이미용업'){
-        showData(value);
+        showCateData(value);
     } else if(value == '기타서비스업'){
-        showData(value);
+        showCateData(value);
+    } else {
+        showCateData(-1);
     }
 }
 
@@ -264,13 +291,13 @@ function foodHandler(value){
 }
 
 
-//main
+//initialization
 fetch(apiUrl)
 .then((response) => {
     return response.json();
 })
 .then((data) => {
-    //data initialization
+    
     tmpData = data.getGoodPriceStore.body.items.item;
         originCsv.forEach((element) => {
             tmpData.forEach((tmpe) => {
@@ -282,11 +309,11 @@ fetch(apiUrl)
             })
         });
         originData = tmpData;
+        console.log('data init complete');
 })
 .then(()=>{
-    //console.log(originData);
-    putMarkMap();
-    console.log(markers);
-    showMarker();
+    setMarker();
+    console.log('marker init complete');
 })
 .catch((error) =>{console.log('Error:', error)});
+
