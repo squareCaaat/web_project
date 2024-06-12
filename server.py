@@ -9,7 +9,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == '/':
-            self.path = '/test.html'
+            self.path = '/web4.html'
         return super().do_GET()
 
 if __name__ == "__main__":

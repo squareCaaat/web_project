@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Test</title>
+    <link rel="stylesheet" href="cssWeb3.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <header>
+        <div class="header-logo">
+            <a id="logo" href=""><img src="media/goodpricelogo.png" width="100" height="inherit" alt="goodpricelogo"></a>
+        </div>
+        <div class="header-main">
+            <h4><strong>부산 착한가격업소</strong></h4>
+        </div>
+    </header>
+    <div class="guide-container">
+        <div class="guide">
+            <a href="https://www.goodprice.go.kr/introduce/consumer.do"><h4><span>착한식당이란?</span></h4></a>
+        </div>
+        <div class="guide">
+            <h4><span>안내사항</span></h4>
+        </div>
+    </div>
+    <nav>
+        <div class="slider">
+            <div class="slide"></div>
+            <div class="slide"></div>
+            <div class="slide"></div>
+        </div>
+    </nav>
+    <div class="content-container">
+        <aside class="aside1">
+            <h3>필터 기능</h3>
+            <div class="filter-options">
+                <h4 id="line"><strong>구(군)</strong></h4>
+                <select id="region" name="region">
+                    <option value="모두" selected>모두</option>
+                    <option value="강서구">강서구</option>
+                    <option value="사상구">사상구</option>
+                    <option value="사하구">사하구</option>
+                    <option value="북구">북구</option>
+                    <option value="금정구">금정구</option>
+                    <option value="동래구">동래구</option>
+                    <option value="연제구">연제구</option>
+                    <option value="진구">진구</option>
+                    <option value="서구">서구</option>
+                    <option value="동구">동구</option>
+                    <option value="중구">중구</option>
+                    <option value="영도구">영도구</option>
+                    <option value="남구">남구</option>
+                    <option value="수영구">수영구</option>
+                    <option value="해운대구">해운대구</option>
+                    <option value="기장군">기장군</option>
+                </select>
+                <h4 id="line"><strong>읍면동</strong></h4>
+                <select id="district" name="district">
+                    <option value="모두" selected>모두</option>
+                    <option value="남천동">남천동</option>
+                    <option value="대연동">대연동</option>
+                    <option value="화명동">화명동</option>
+                    <option value="남포동">남포동</option>
+                </select>
+                <h4 id="line"><strong>업종</strong></h4>
+                <select id="category" name="category" onchange="categoryHandler(value)">
+                    <option value="모두" selected>모두</option>
+                    <option value="음식점">음식점</option>
+                    <option value="기타서비스업">기타서비스업</option>
+                    <option value="목욕업">목욕업</option>
+                    <option value="세탁업">세탁업</option>
+                    <option value="숙박업">숙박업</option>
+                    <option value="이미용업">이미용업</option>
+                </select>
+                <div id="fcategory">
+                    <h4 id="line"><strong>음식 종류</strong></h4>
+                    <select id="food-category" name="food-category" onchange="foodHandler(value)">
+                        <option value="모두" selected>모두</option>
+                        <option value="한식">한식</option>
+                        <option value="양식">양식</option>
+                        <option value="중식">중식</option>
+                        <option value="일식">일식</option>
+                        <option value="카페">카페/디저트</option>
+                    </select>
+                    <div id="kdetail">
+                        <h4 id="line"><strong>한식 세부</strong></h4>
+                        <select id="korean-detail" name="korean-detail">
+                            <option value="모두" selected>모두</option>
+                            <option value="일반">일반</option>
+                            <option value="한정식">한정식</option>
+                            <option value="찌개류">찌개류</option>
+                            <option value="면류">면류</option>
+                            <option value="육류">육류</option>
+                            <option value="분식">분식</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                </div>
+                <h4 id="line"><strong id="parkrd-label">주차장</strong></h4>
+                <fieldset class="radio-wrapper">
+                    <label>
+                        <input type="radio" class="parkrd" id="parkA" name="park" value="A" checked>
+                        <span class="radiolb">모두</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="parkrd" id="parkY" name="park" value="Y">
+                        <span class="radiolb">있음</span>
+                    </label>
+                    <label>
+                        <input type="radio" class="parkrd" id="parkN" name="park" value="N">
+                        <span class="radiolb">없음</span>
+                    </label>
+                </fieldset>
+            </div>
+            <form>
+                <input type="text" placeholder="검색어 입력">
+                <button type="button" id="searchbtn">검색</button>
+            </form>
+        </aside>
+        <section>
+            <div class="map_wrapper">
+                <div id="map"></div>
+                <div class="custom_typecontrol radius_border">
+                    <span id="btnRoadmap" class="selected_btn" onclick="setMapType('roadmap')">지도</span>
+                    <span id="btnSkyview" class="btn" onclick="setMapType('skyview')">스카이뷰</span>
+                </div>
+                <div class="custom_zoomcontrol radius_border"> 
+                    <span onclick="zoomIn()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png" alt="확대"></span>  
+                    <span onclick="zoomOut()"><img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png" alt="축소"></span>
+                </div>
+            </div>
+        </section>
+        <aside class="aside2">
+            <h4 id="line">추천 팝업 기능 구현</h4>
+        </aside>
+    </div>
+    <div class="data-wrapper">
+        <div id="data-container">
+            <!--Data will be show here-->
+        </div>
+    </div>
+    <footer>
+        <div>End of Page</div>
+    </footer>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3b9f7b019fc7ea588451181ce15298fe&libraries=LIBRARY&libraries=services,clusterer,drawing"></script>
+    <script type="text/javascript" src="webjs.js"></script>
+</body>
+</html>
