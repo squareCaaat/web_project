@@ -73,12 +73,49 @@ $.ajax({
     dataType: 'text'
 }).done(successFunction);
 
-//settimeout
-
-
 //marker handler
 let markers = [];
 let clusterMarkers = [];
+var restIcon = new kakao.maps.MarkerImage(
+    './media/restaurantmarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var servIcon = new kakao.maps.MarkerImage(
+    './media/servicemarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var cafeIcon = new kakao.maps.MarkerImage(
+    './media/cafemarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var accomoIcon = new kakao.maps.MarkerImage(
+    './media/accomomarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var bathIcon = new kakao.maps.MarkerImage(
+    './media/bathmarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var laundryIcon = new kakao.maps.MarkerImage(
+    './media/laundrymarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var salonIcon = new kakao.maps.MarkerImage(
+    './media/salonmarker.png',
+    new kakao.maps.Size(32, 32)
+);
+
+var icon = new kakao.maps.MarkerImage(
+    './media/marker.png',
+    new kakao.maps.Size(32, 32)
+);
+
 async function setMarker(){
     //marker initialization
     originData.forEach((item)=>{
@@ -96,9 +133,52 @@ async function setMarker(){
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
                 
                 // 결과값으로 받은 위치를 마커 객체에 저장
-                var marker = new kakao.maps.Marker({
-                    position: coords
-                });
+                if(item.cn === '음식점'){
+                    if(item.cate !== '기타양식'){
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: restIcon
+                        });
+                    } else{
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: cafeIcon
+                        });
+                    }
+                } else{
+                    if(item.cate === '기타서비스업'){
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: servIcon
+                        });
+                    } else if(item.cate === '목욕업'){
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: bathIcon
+                        });
+                    } else if(item.cate === '세탁업'){
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: laundryIcon
+                        });
+                    } else if(item.cate === '숙박업'){
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: accomoIcon
+                        });
+                    } else if(item.cate === '이미용업' || item.cn === '이미용'){
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: salonIcon
+                        });
+                    } else{
+                        var marker = new kakao.maps.Marker({
+                            position: coords,
+                            image: icon
+                        });
+                    }
+                }
+                
 
                 // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
                 var iwContent = `<div style="width:150px;text-align:center;padding:6px 0;">${item.sj}<br/>${item.adres}</div>`;
@@ -541,6 +621,7 @@ async function fetchData(){
     })
     .then((data) => {
         tmpData = data.getGoodPriceStore.body.items.item;
+        // 데이터 정상화
         tmpData.forEach((item)=>{
             if(item.sj === '참숯마을'){
                 item.adres = '부산 연제구 월드컵대로111번길 6-8';
@@ -571,6 +652,24 @@ async function fetchData(){
             }
             if(item.sj === '짬뽕땡기는날'){
                 item.adres = '부산 강서구 명지오션시티10로 16 영어도시 퀸덤1차 상가동 241가호';
+            }
+            if(item.sj === '서민세탁소'){
+                item.cn = '기타서비스업';
+            }
+            if(item.sj === '자매미용실'){
+                item.cn = '이미용업';
+            }
+            if(item.sj === '도리오헤어'){
+                item.cn = '이미용업';
+            }
+            if(item.sj === '온타임'){
+                item.cn = '음식점';
+            }
+            if(item.sj === '카페두콩'){
+                item.cn = '음식점';
+            }
+            if(item.sj === '영선꼼장어,바다장어'){
+                item.sj = '영선꼼장어 바다장어';
             }
         });
         originCsv.forEach((el) => {
