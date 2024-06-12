@@ -215,6 +215,18 @@ section {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.data-wrapper{
+    background-color: white;
+    padding-top: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.data-container{
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+}
+
 span {
     transition: font-size 0.4s;
 }
@@ -223,6 +235,7 @@ span:hover {
     font-size: 130%;
 }
 
+/* input handler */
 input:-ms-input-placeholder {
     color: white;
 }
