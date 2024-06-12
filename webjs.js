@@ -118,7 +118,9 @@ async function setMarker(){
                     infowindow.close();
                 });
                 
-                kakao.maps.event.addListener(marker, 'click', ()=>{showStoreData(item.adres)});
+                kakao.maps.event.addListener(marker, 'click', ()=>{
+                    showStoreData(item.adres);
+                });
 
                 coordmap.marker = marker;
                 markers.push(coordmap);
@@ -136,9 +138,9 @@ function showAllMarker(){
     });
 }
 
-function showFilteredMarker(filter){
+// function showFilteredMarker(filter){
     
-}
+// }
 
 //filter handler
 let filterData = [];
@@ -232,6 +234,15 @@ function showStoreData(value){
     originData.forEach((element)=>{
         if(element.adres === value){
             const card = createDC(element);
+            markers.some((mk)=>{
+                if(mk.data.adres === value){
+                    map.setCenter(mk.marker.n);
+                    map.setLevel(4);
+                    return true;
+                } else {
+                    return false;
+                }
+            });
             dcontainer.appendChild(card);
             return;
         }
@@ -382,10 +393,15 @@ $(document).ready(function() {
     function regionFilter(filter){
         if(filter.region == '중구'){
             markers.forEach((mk)=>{
-                if(mk.data.localeCd in districtIdxData[0].disId){
-                    mk.marker.setMap(map);
-                    console.log(mk.data.sj);
-                }
+                districtIdxData[0].disId.some((dd)=>{
+                    if(mk.data.localeCd == dd){
+                        mk.marker.setMap(map);
+                        console.log(mk.data.sj);
+                        console.log(mk.data.localeCd);
+                        console.log(mk.data.locale);
+                    }
+                })
+                
             })
         }
     }
@@ -396,7 +412,7 @@ $(document).ready(function() {
                 if(mk.data.cn == filter.category){
                     mk.marker.setMap(map);
                     showCateData(filter.category);
-                    console.log(mk.data.sj);
+                    //console.log(mk.data.sj);
                 }
             });
         } else{
@@ -404,7 +420,7 @@ $(document).ready(function() {
                 if(mk.data.cate == filter.category){
                     mk.marker.setMap(map);
                     showCateData(filter.category);
-                    console.log(mk.data.sj);
+                    //console.log(mk.data.sj);
                 }
             });
         }
