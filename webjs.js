@@ -37,7 +37,8 @@ function relayout() {
     // 크기를 변경한 이후에는 반드시  map.relayout 함수를 호출해야 합니다 
     // window의 resize 이벤트에 의한 크기변경은 map.relayout 함수가 자동으로 호출됩니다
     map.relayout();
-    map.setCenter(new kakao.maps.LatLng(35.18003483348194, 129.07493819187425));
+    map.setCenter(busanCenter.부산.coords);
+    //new kakao.maps.LatLng(35.18003483348194, 129.07493819187425)
 }
 
 //openAPI implementaion
@@ -77,6 +78,7 @@ $.ajax({
 
 //marker handler
 let markers = [];
+let clusterMarkers = [];
 async function setMarker(){
     //marker initialization
     originData.forEach((item)=>{
@@ -144,6 +146,7 @@ function showAllMarker(){
 
 //filter handler
 let filterData = [];
+
 const dongData = {
     "중구": ["광복동", "남포동", "대창동", "동광동", "보수동", "부평동", "신창동", "영주동", "중앙동", "대청동", "창선동"],
     "동구": ["범일동", "수정동", "좌천동", "초량동"],
@@ -162,22 +165,22 @@ const dongData = {
     "수영구": ["광안동", "남천동", "망미동", "민락동", "수영동"],
     "기장군": ["기장읍", "장안읍", "정관읍", "일광읍", "철마면"]
 };
-const districtIdxData = [
+const regionDistId = [
     {
         'disId': [309, 311, 313, 314, 324, 326, 327, 328, 331, 332, 333, 335, 342, 343, 344, 345, 346, 319, 349, 350, "대창동", "영주동"],
-        'disName': '중구'
+        'RegName': '중구'
     },
     {
         'disId': [274, 279, 80, 83, 91, "좌천동"],
-        'disName': '동구'
+        'RegName': '동구'
     },
     {
         'disId': [229, 230, 232, 233, 354, 351, 237, 238, 239, 241, 242, 243, 244, 246, 247, 248, 249, 251, "신호동"],
-        'disName': '서구'
+        'RegName': '서구'
     },
     {
         'disId': [280, 281, 282, 292, 212, 214, 297, 299, 300, 301, 302, 303, 304, 305, 306, 287, 288, 289, 290],
-        'disName': '영도구'
+        'RegName': '영도구'
     },
     // {
     //     'disId': [274, 279, 80, 83, 91, "좌천동"],
@@ -202,6 +205,7 @@ const districtIdxData = [
     // "기장군": ["기장읍", "장안읍", "정관읍", "일광읍", "철마면"]
 ];
 
+let distIdMapping = [];
 
 //DOM handler
 function showCateData(value){
@@ -354,6 +358,64 @@ function clearMarkers(){
     //cluster.clear();
 }
 
+
+let busanCenter = {
+    부산: {
+        coords: new kakao.maps.LatLng(35.1798, 129.075)
+    },
+    강서구: {
+        coords: new kakao.maps.LatLng(35.20916389, 128.9829083)
+    },
+    금정구: {
+        coords: new kakao.maps.LatLng(35.24007778, 129.0943194)
+    },
+    강서구: {
+        coords: new kakao.maps.LatLng(35.20916389, 128.9829083)
+    },
+    남구: {
+        coords: new kakao.maps.LatLng(35.13340833, 129.0865)
+    },
+    동구: {
+        coords: new kakao.maps.LatLng(35.13589444, 129.059175)
+    },
+    동래구: {
+        coords: new kakao.maps.LatLng(35.20187222, 129.0858556)
+    },
+    부산진구: {
+        coords: new kakao.maps.LatLng(35.15995278, 129.0553194)
+    },
+    북구: {
+        coords: new kakao.maps.LatLng(35.19418056, 128.992475)
+    },
+    사상구: {
+        coords: new kakao.maps.LatLng(35.14946667, 128.9933333)
+    },
+    사하구: {
+        coords: new kakao.maps.LatLng(35.10142778, 128.9770417)
+    },
+    서구: {
+        coords: new kakao.maps.LatLng(35.09483611, 129.0263778)
+    },
+    수영구: {
+        coords: new kakao.maps.LatLng(35.14246667, 129.115375)
+    },
+    연제구: {
+        coords: new kakao.maps.LatLng(35.17318611, 129.082075)
+    },
+    영도구: {
+        coords: new kakao.maps.LatLng(35.08811667, 129.0701861)
+    },
+    중구: {
+        coords: new kakao.maps.LatLng(35.10321667, 129.0345083)
+    },
+    해운대구: {
+        coords: new kakao.maps.LatLng(35.16001944, 129.1658083)
+    },
+    기장군: {
+        coords: new kakao.maps.LatLng(35.24477541, 129.2222873)
+    }
+};
+
 //main
 $(document).ready(function() {
     fetchData();
@@ -393,18 +455,26 @@ $(document).ready(function() {
     function regionFilter(filter){
         if(filter.region == '중구'){
             markers.forEach((mk)=>{
-                districtIdxData[0].disId.some((dd)=>{
+                regionDistId[0].disId.some((dd)=>{
                     if(mk.data.localeCd == dd){
                         mk.marker.setMap(map);
-                        console.log(mk.data.sj);
-                        console.log(mk.data.localeCd);
-                        console.log(mk.data.locale);
+                        map.setCenter(busanCenter.중구.coords);
+                        map.setLevel(8);
+                        return true;
                     }
                 })
                 
             })
         }
     }
+
+    // function distFilter(filter){
+    //     var distId;
+    //     filter.district
+    //     markers.some((mk)=>{
+    //         if(mk.data.localeCd)
+    //     })
+    // }
 
     function cateFilter(filter){
         if(filter.category == '음식점'){
@@ -426,6 +496,7 @@ $(document).ready(function() {
         }
         map.setLevel(8);
     }
+
 
     $('#category').change(function(){
         if ($(this).val() != '음식점' && $(this).val() != '모두') {
@@ -512,6 +583,13 @@ async function fetchData(){
             })
         });
         originData = tmpData;
+        originData.forEach((el)=>{
+            var tmpDist = {};
+            if(el.locale){
+                tmpDist[el.locale] = el.localeCd;    
+                distIdMapping.push(tmpDist);
+            }
+        });
         console.log('data init complete');
     })
     .then(()=>{
