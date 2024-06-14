@@ -151,22 +151,22 @@ async function setMarker(){
                             position: coords,
                             image: servIcon
                         });
-                    } else if(item.cate === '목욕업'){
+                    } else if(item.cn === '목욕업'){
                         var marker = new kakao.maps.Marker({
                             position: coords,
                             image: bathIcon
                         });
-                    } else if(item.cate === '세탁업'){
+                    } else if(item.cn === '세탁업'){
                         var marker = new kakao.maps.Marker({
                             position: coords,
                             image: laundryIcon
                         });
-                    } else if(item.cate === '숙박업'){
+                    } else if(item.cn === '숙박업'){
                         var marker = new kakao.maps.Marker({
                             position: coords,
                             image: accomoIcon
                         });
-                    } else if(item.cate === '이미용업' || item.cn === '이미용'){
+                    } else if(item.cn === '이미용업'){
                         var marker = new kakao.maps.Marker({
                             position: coords,
                             image: salonIcon
@@ -220,13 +220,27 @@ function showAllMarker(){
     });
 }
 
-// function showFilteredMarker(filter){
-    
-// }
+function showFilteredMarker(filteredData){
+    markers.forEach((mk)=>{
+        filteredData.forEach((el)=>{
+            if(mk.data == el){
+                mk.marker.setMap(map);
+            }
+        });
+    });
+}
+
+function showFilteredData(filteredData){
+    const dcontainer = document.getElementById('data-container');
+    dcontainer.innerHTML = '';
+    filteredData.forEach((element)=>{
+        const card = createDC(element);
+        dcontainer.appendChild(card);
+    });
+    showFilteredMarker(filteredData);
+}
 
 //filter handler
-let filterData = [];
-
 const dongData = {
     "중구": ["광복동", "남포동", "대창동", "동광동", "보수동", "부평동", "신창동", "영주동", "중앙동", "대청동", "창선동"],
     "동구": ["범일동", "수정동", "좌천동", "초량동"],
@@ -361,7 +375,7 @@ function createDC(item){
         
         body.appendChild(cate);
     } else{
-        cate.textContent = `업종: ${item.cate}`;
+        cate.textContent = `업종: ${item.cn}`;
         body.appendChild(cate);
     }
 
@@ -513,10 +527,31 @@ $(document).ready(function() {
 
     function processFilters() {
         const filters = getFilterValues();
+        const filteredData = originData.filter(filterFunction(filters));
         clearMarkers();
         console.log('Filter Values:', filters);
-        regionFilter(filters);
-        cateFilter(filters);
+        console.log('filtered data: ', filteredData);
+        showFilteredMarker(filteredData);
+        // regionFilter(filters);
+        // cateFilter(filters);
+    }
+
+    function filterFunction(filters){
+        return function(el){
+            if(filters.category !== '모두' && el.cn !== filters.category){
+                return false;
+            }
+            if(filters.foodCategory !== '모두' && el.cate !== filters.foodCategory){
+                return false;
+            }
+            if(filters.koreanDetail !== '모두' && el.cate !== filters.koreanDetail){
+                return false;
+            }
+            if(filters.park !== '모두' && el.parkngAt !== filters.park){
+                return false;
+            }
+            return true;
+        };
     }
 
     $('select').change(function() {
@@ -675,9 +710,27 @@ async function fetchData(){
         originCsv.forEach((el) => {
             tmpData.forEach((item) => {
                 if(item.sj === el.sj){
-                    item.cate = el.cate;
-                    item.menu = el.menu;
-                    item.pric = el.pric;
+                    if(item.cn === '음식점'){
+                        item.cate = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                    } else if(item.cn === '이미용'){
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                    } else if(item.cn === '목욕'){
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                    } else if(item.cn === '기타'){
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                    } else{
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                    }
                 }
             })
         });
