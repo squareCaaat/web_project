@@ -2,7 +2,7 @@
 var container = document.getElementById('map');
 var options = {
     center: new kakao.maps.LatLng(35.18003483348194, 129.07493819187425),
-    level: 5
+    level: 9
 };
 // 지도 생성
 var map = new kakao.maps.Map(container, options);
@@ -225,6 +225,13 @@ function showFilteredMarker(filteredData){
         filteredData.forEach((el)=>{
             if(mk.data == el){
                 mk.marker.setMap(map);
+                for(let id in busanCenter){
+                    let coord = busanCenter[id];
+                    if(mk.data.region == id){
+                        map.setCenter(coord.coords);
+                        map.setLevel(8);
+                    }
+                }
             }
         });
     });
@@ -259,47 +266,47 @@ const dongData = {
     "수영구": ["광안동", "남천동", "망미동", "민락동", "수영동"],
     "기장군": ["기장읍", "장안읍", "정관읍", "일광읍", "철마면"]
 };
-const regionDistId = [
-    {
-        'disId': [309, 311, 313, 314, 324, 326, 327, 328, 331, 332, 333, 335, 342, 343, 344, 345, 346, 319, 349, 350, "대창동", "영주동"],
-        'RegName': '중구'
-    },
-    {
-        'disId': [274, 279, 80, 83, 91, "좌천동"],
-        'RegName': '동구'
-    },
-    {
-        'disId': [229, 230, 232, 233, 354, 351, 237, 238, 239, 241, 242, 243, 244, 246, 247, 248, 249, 251, "신호동"],
-        'RegName': '서구'
-    },
-    {
-        'disId': [280, 281, 282, 292, 212, 214, 297, 299, 300, 301, 302, 303, 304, 305, 306, 287, 288, 289, 290],
-        'RegName': '영도구'
-    },
-    // {
-    //     'disId': [274, 279, 80, 83, 91, "좌천동"],
-    //     'disName': '동구'
-    // },
-    // {
-    //     'disId': [274, 279, 80, 83, 91, "좌천동"],
-    //     'disName': '동구'
-    // },
+// const regionDistId = [
+//     {
+//         'disId': [309, 311, 313, 314, 324, 326, 327, 328, 331, 332, 333, 335, 342, 343, 344, 345, 346, 319, 349, 350, "대창동", "영주동"],
+//         'RegName': '중구'
+//     },
+//     {
+//         'disId': [274, 279, 80, 83, 91, "좌천동"],
+//         'RegName': '동구'
+//     },
+//     {
+//         'disId': [229, 230, 232, 233, 354, 351, 237, 238, 239, 241, 242, 243, 244, 246, 247, 248, 249, 251, "신호동"],
+//         'RegName': '서구'
+//     },
+//     {
+//         'disId': [280, 281, 282, 292, 212, 214, 297, 299, 300, 301, 302, 303, 304, 305, 306, 287, 288, 289, 290],
+//         'RegName': '영도구'
+//     },
+//     // {
+//     //     'disId': [274, 279, 80, 83, 91, "좌천동"],
+//     //     'disName': '동구'
+//     // },
+//     // {
+//     //     'disId': [274, 279, 80, 83, 91, "좌천동"],
+//     //     'disName': '동구'
+//     // },
 
-    // "부산진구": ["개금동", "당감동", "범전동", "범천동", "부암동", "부전동", "양정동", "전포동", "연지동", "초읍동"],
-    // "동래구": ["낙민동", "명륜동", "복천동", "사직동", "수안동", "안락동", "명장동","온천동"],
-    // "연제구": ["거제동", "연산동"],
-    // "금정구": ["구서동", "금사동", "남산동", "부곡동", "서동", "선동", "오륜동", "장전동", "청룡동", "회동동"],
-    // "북구": ["구포동", "금곡동", "덕천동", "만덕동", "화명동"],
-    // "사상구": ["감전동", "괘법동", "덕포동", "모라동", "삼락동", "엄궁동", "주례동"],
-    // "사하구": ["감천동", "괴정동", "구평동", "다대동", "당리동", "신평동", "장림동", "하단동"],
-    // "강서구": ["대저동", "명지동", "녹산동", "가락동", "범방동", "생곡동", "송정동", "죽림동", "지사동", "천가동", "화전동"],
-    // "남구": ["감만동", "대연동", "문현동", "용당동", "용호동", "우암동"],
-    // "해운대구": ["반여동", "반송동", "송정동", "우동", "좌동", "중동"],
-    // "수영구": ["광안동", "남천동", "망미동", "민락동", "수영동"],
-    // "기장군": ["기장읍", "장안읍", "정관읍", "일광읍", "철마면"]
-];
+//     // "부산진구": ["개금동", "당감동", "범전동", "범천동", "부암동", "부전동", "양정동", "전포동", "연지동", "초읍동"],
+//     // "동래구": ["낙민동", "명륜동", "복천동", "사직동", "수안동", "안락동", "명장동","온천동"],
+//     // "연제구": ["거제동", "연산동"],
+//     // "금정구": ["구서동", "금사동", "남산동", "부곡동", "서동", "선동", "오륜동", "장전동", "청룡동", "회동동"],
+//     // "북구": ["구포동", "금곡동", "덕천동", "만덕동", "화명동"],
+//     // "사상구": ["감전동", "괘법동", "덕포동", "모라동", "삼락동", "엄궁동", "주례동"],
+//     // "사하구": ["감천동", "괴정동", "구평동", "다대동", "당리동", "신평동", "장림동", "하단동"],
+//     // "강서구": ["대저동", "명지동", "녹산동", "가락동", "범방동", "생곡동", "송정동", "죽림동", "지사동", "천가동", "화전동"],
+//     // "남구": ["감만동", "대연동", "문현동", "용당동", "용호동", "우암동"],
+//     // "해운대구": ["반여동", "반송동", "송정동", "우동", "좌동", "중동"],
+//     // "수영구": ["광안동", "남천동", "망미동", "민락동", "수영동"],
+//     // "기장군": ["기장읍", "장안읍", "정관읍", "일광읍", "철마면"]
+// ];
 
-let distIdMapping = [];
+//let distIdMapping = [];
 
 //DOM handler
 function showCateData(value){
@@ -515,11 +522,12 @@ $(document).ready(function() {
     fetchData();
     function getFilterValues() {
         const filters = {
+            storeSearch: $('#storeSearch').val(),
             region: $('#region').val(),
             district: $('#district').val(),
             category: $('#category').val(),
-            foodCategory: $('#food-category').val(),
-            koreanDetail: $('#korean-detail').val(),
+            foodCategory: $('#foodCategory').val(),
+            koreanDetail: $('#koreanDetail').val(),
             park: $('input[name="park"]:checked').val()
         };
         return filters;
@@ -538,13 +546,24 @@ $(document).ready(function() {
 
     function filterFunction(filters){
         return function(el){
+            if(filters.storeSearch && !(
+                el.sj.includes(filters.storeSearch) ||
+                el.cn.includes(filters.storeSearch) ||
+                (el.cate != null && el.cate.includes(filters.storeSearch)) ||
+                (el.menu != null && el.menu.includes(filters.storeSearch))
+            )){
+                return false;
+            }
+            if(filters.region !== '모두' && el.region !== filters.region){
+                return false;
+            }
             if(filters.category !== '모두' && el.cn !== filters.category){
                 return false;
             }
-            if(filters.foodCategory !== '모두' && el.cate !== filters.foodCategory){
+            if(filters.foodCategory !== '모두' && (filters.category !== '음식점' && el.cate !== filters.foodCategory)){
                 return false;
             }
-            if(filters.koreanDetail !== '모두' && el.cate !== filters.koreanDetail){
+            if(filters.koreanDetail !== '모두' && (filters.foodCategory !== '한식' && el.cate !== filters.koreanDetail)){
                 return false;
             }
             if(filters.park !== '모두' && el.parkngAt !== filters.park){
@@ -563,6 +582,9 @@ $(document).ready(function() {
         processFilters();
     });
 
+    $('#searchbtn').click(function() {
+        processFilters();
+    })
     // 페이지 로드 시 초기 필터 값을 처리
     //processFilters();
 
@@ -615,7 +637,7 @@ $(document).ready(function() {
 
     $('#category').change(function(){
         if ($(this).val() != '음식점' && $(this).val() != '모두') {
-            $('#food-category').val('모두').attr('selected', 'selected');
+            $('#foodCategory').val('모두').attr('selected', 'selected');
             $('#fcategory').hide(); 
             processFilters();
         } else{
@@ -624,28 +646,28 @@ $(document).ready(function() {
         }
     });
 
-    $('#food-category').change(function(){
+    $('#foodCategory').change(function(){
         if ($(this).val() != '한식' && $(this).val() != '모두') {
-            $('#korean-detail').val('모두').attr('selected', 'selected');
+            $('#koreanDetail').val('모두').attr('selected', 'selected');
             $('#kdetail').hide(); 
             processFilters();
         } else{
             $('#kdetail').show(); 
             processFilters();
         }
-    })
+    });
 });
 
 function foodHandler(value){
-    const kfood = document.getElementById('kdetail');
-    const selkFood = document.getElementById('korean-detail');
-    if(value != '한식'){
-        kfood.style.display = 'none';
-        selkFood.options[0].selected = true;
-    }
-    if(value == '한식'){
-        kfood.style.display = 'block';
-    }
+    // const kfood = document.getElementById('kdetail');
+    // const selkFood = document.getElementById('korean-detail');
+    // if(value != '한식'){
+    //     kfood.style.display = 'none';
+    //     selkFood.options[0].selected = true;
+    // }
+    // if(value == '한식'){
+    //     kfood.style.display = 'block';
+    // }
 }
 
 //initialization
@@ -732,14 +754,26 @@ async function fetchData(){
                         item.pric = el.pric;
                     }
                 }
-            })
+            });
         });
         originData = tmpData;
         originData.forEach((el)=>{
-            var tmpDist = {};
-            if(el.locale){
-                tmpDist[el.locale] = el.localeCd;    
-                distIdMapping.push(tmpDist);
+            for(let id in dongData){
+                let dong = dongData[id];
+                dong.some((dg)=>{
+                    let eldg = el.locale.substring(0,2);
+                    let exp = /\d/;
+                    if(eldg[1] == '동'){
+                        eldg = eldg.substring(0,1);
+                    } else if(exp.test(eldg)){
+                        eldg = eldg[0];
+                    }
+                    //console.log(eldg);
+                    if(dg.includes(eldg)){
+                        el.region = id;
+                        //console.log(el);
+                    }
+                })
             }
         });
         console.log('data init complete');

@@ -46,7 +46,7 @@
                     <option value="금정구">금정구</option>
                     <option value="동래구">동래구</option>
                     <option value="연제구">연제구</option>
-                    <option value="진구">진구</option>
+                    <option value="부산진구">진구</option>
                     <option value="서구">서구</option>
                     <option value="동구">동구</option>
                     <option value="중구">중구</option>
@@ -65,7 +65,7 @@
                     <option value="남포동">남포동</option>
                 </select>
                 <h4 id="line"><strong>업종</strong></h4>
-                <select id="category" name="category" onchange="categoryHandler(value)">
+                <select id="category" name="category">
                     <option value="모두" selected>모두</option>
                     <option value="음식점">음식점</option>
                     <option value="기타서비스업">기타서비스업</option>
@@ -76,25 +76,25 @@
                 </select>
                 <div id="fcategory">
                     <h4 id="line"><strong>음식 종류</strong></h4>
-                    <select id="foodCategory" name="foodCategory" onchange="foodHandler(value)">
+                    <select id="foodCategory" name="foodCategory">
                         <option value="모두" selected>모두</option>
                         <option value="한식">한식</option>
                         <option value="양식">양식</option>
                         <option value="중식">중식</option>
                         <option value="일식">일식</option>
-                        <option value="카페">카페/디저트</option>
+                        <option value="기타양식">카페/디저트</option>
                     </select>
                     <div id="kdetail">
                         <h4 id="line"><strong>한식 세부</strong></h4>
                         <select id="koreanDetail" name="koreanDetail">
                             <option value="모두" selected>모두</option>
-                            <option value="일반">일반</option>
-                            <option value="한정식">한정식</option>
-                            <option value="찌개류">찌개류</option>
-                            <option value="면류">면류</option>
-                            <option value="육류">육류</option>
-                            <option value="분식">분식</option>
-                            <option value="기타">기타</option>
+                            <option value="한식_일반">일반</option>
+                            <option value="한식_한정식">한정식</option>
+                            <option value="한식_찌개류">찌개류</option>
+                            <option value="한식_면류">면류</option>
+                            <option value="한식_육류">육류</option>
+                            <option value="한식_분식">분식</option>
+                            <option value="한식_기타">기타</option>
                         </select>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                 </fieldset>
             </div>
             <form>
-                <input type="text" placeholder="검색어 입력">
+                <input type="text" id="storeSearch" placeholder="검색어 입력">
                 <button type="button" id="searchbtn">검색</button>
             </form>
         </aside>
