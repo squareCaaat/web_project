@@ -200,7 +200,8 @@ async function setMarker(){
                 
                 kakao.maps.event.addListener(marker, 'click', ()=>{
                     showStoreData(item.adres);
-                    //map.setCenter(marker.n);
+                    map.setCenter(coords);
+                    map.setLevel(2);
                 });
 
                 coordmap.marker = marker;
@@ -231,7 +232,7 @@ function showFilteredMarker(filteredData){
 }
 
 function showFilteredData(filteredData){
-    const dcontainer = document.getElementById('data-container');
+    const dcontainer = document.getElementById('data_container');
     dcontainer.innerHTML = '';
     filteredData.forEach((element)=>{
         const card = createDC(element);
@@ -260,11 +261,13 @@ const dongData = {
     "기장군": ["기장읍", "장안읍", "정관읍", "일광읍", "철마면"]
 };
 
-//let distIdMapping = [];
-
 //DOM handler
+function popup(){
+    
+}
+
 function showCateData(value){
-    const dcontainer = document.getElementById('data-container');
+    const dcontainer = document.getElementById('data_container');
     dcontainer.innerHTML = '';
     if(value == -1){
         dcontainer.innerHTML = '';
@@ -288,7 +291,7 @@ function showCateData(value){
 }
 
 function showStoreData(value){
-    const dcontainer = document.getElementById('data-container');
+    const dcontainer = document.getElementById('data_container');
     dcontainer.innerHTML = '';
     originData.forEach((element)=>{
         if(element.adres === value){
@@ -313,17 +316,17 @@ function createDC(item){
     card.className = 'card';
 
     const header = document.createElement('div');
-    header.className = 'card-header';
+    header.className = 'card_header';
     header.id = `${item.idx}`;
     header.textContent = item.sj;
     card.appendChild(header);
 
     const body = document.createElement('div');
-    body.className = 'card-body';
+    body.className = 'card_body';
 
     const cate = document.createElement('p');
-    cate.className = 'category-detail';
-    if(item.cn == '음식점'){
+    cate.className = 'category_detail';
+    if(item.cn === '음식점'){
         const cn = document.createElement('p');
         cn.className = 'category';
         cn.textContent = '업종: 음식점';
@@ -333,7 +336,6 @@ function createDC(item){
         } else{
             cate.textContent = item.cate? `세부분류: ${item.cate}`: '';
         }
-        
         body.appendChild(cate);
     } else{
         cate.textContent = `업종: ${item.cn}`;
@@ -342,7 +344,7 @@ function createDC(item){
 
     const tel = document.createElement('p');
     tel.className = 'tel';
-    tel.textContent = item.tel? `Tel: ${item.tel}` : 'Tel: 없음';
+    tel.textContent = item.tel? `Tel: ${item.tel}` : '';
     body.appendChild(tel);
 
     const adres = document.createElement('p');
@@ -392,7 +394,7 @@ function clearMarkers(){
     //cluster.clear();
 }
 
-
+// 각 구의 중심 좌표들
 let busanCenter = {
     부산: {
         coords: new kakao.maps.LatLng(35.1798, 129.075)
@@ -477,6 +479,14 @@ $(document).ready(function() {
 
     function filterFunction(filters){
         return function(el){
+            let elfc;
+            if(el.cn === '음식점'){
+                if(el.cate !== '기타양식'){
+                    elfc = el.cate? el.cate.substring(0,2) : '';
+                } else {
+                    elfc = '기타양식';
+                }
+            }
             if(filters.storeSearch && !(
                 el.sj.includes(filters.storeSearch) ||
                 el.cn.includes(filters.storeSearch) ||
@@ -503,10 +513,10 @@ $(document).ready(function() {
             if(filters.category !== '모두' && el.cn !== filters.category){
                 return false;
             }
-            if(filters.foodCategory !== '모두' && (filters.category === '음식점' && el.cate !== filters.foodCategory)){
+            if(filters.foodCategory !== '모두' && elfc !== filters.foodCategory){
                 return false;
             }
-            if(filters.koreanDetail !== '모두' && (filters.foodCategory === '한식' && el.cate !== filters.koreanDetail)){
+            if(filters.koreanDetail !== '모두' && el.cate !== filters.koreanDetail){
                 return false;
             }
             if(filters.park !== '모두' && el.parkngAt !== filters.park){
@@ -572,9 +582,9 @@ async function fetchData(){
         return response.json();
     })
     .then((data) => {
-        tmpData = data.getGoodPriceStore.body.items.item;
+        originData = data.getGoodPriceStore.body.items.item;
         // 데이터 정상화
-        tmpData.forEach((item)=>{
+        originData.forEach((item)=>{
             if(item.sj === '참숯마을'){
                 item.adres = '부산 연제구 월드컵대로111번길 6-8';
             }
@@ -625,7 +635,7 @@ async function fetchData(){
             }
         });
         originCsv.forEach((el) => {
-            tmpData.forEach((item) => {
+            originData.forEach((item) => {
                 if(item.sj === el.sj){
                     if(item.cn === '음식점'){
                         item.cate = el.cate;
@@ -651,7 +661,6 @@ async function fetchData(){
                 }
             });
         });
-        originData = tmpData;
         originData.forEach((el)=>{
             for(let id in dongData){
                 let dong = dongData[id];
@@ -678,4 +687,3 @@ async function fetchData(){
     })
     .catch((error) =>{console.log('Error:', error)});
 }
-
