@@ -232,6 +232,7 @@ function showFilteredMarker(filteredData){
 }
 
 function showFilteredData(filteredData){
+    console.log('show filtered data');
     const dcontainer = document.getElementById('data_container');
     dcontainer.innerHTML = '';
     filteredData.forEach((element)=>{
@@ -262,7 +263,7 @@ const dongData = {
 };
 
 //DOM handler
-function popup(){
+function cardModalCreate(item){
     
 }
 
@@ -316,9 +317,11 @@ function createDC(item){
     card.className = 'card';
 
     const header = document.createElement('div');
-    header.className = 'card_header';
-    header.id = `${item.idx}`;
-    header.textContent = item.sj;
+    //header.id = `${item.idx}`;
+    const storeName = document.createElement('p');
+    storeName.className = 'card_header';
+    storeName.textContent = item.sj;
+    header.appendChild(storeName);
     card.appendChild(header);
 
     const body = document.createElement('div');
@@ -474,7 +477,11 @@ $(document).ready(function() {
         clearMarkers();
         console.log('Filter Values:', filters);
         console.log('filtered data: ', filteredData);
-        showFilteredMarker(filteredData);
+        //showFilteredMarker(filteredData);
+        showFilteredData(filteredData);
+        $('.card_header').click(function(){
+            $('.card_modal').show();
+        });
     }
 
     function filterFunction(filters){
@@ -537,6 +544,10 @@ $(document).ready(function() {
 
     $('#searchbtn').click(function() {
         processFilters();
+    });
+
+    $('#modal_closebtn').click(function(){
+        $('.card_modal').hide();
     });
 
     $('#region').change(function(){
