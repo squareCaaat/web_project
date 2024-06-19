@@ -202,12 +202,13 @@ async function setMarker(){
                     showStoreData(item.adres);
                     map.setCenter(coords);
                     map.setLevel(2);
+                    cardModalHandler();
                 });
 
                 coordmap.marker = marker;
                 markers.push(coordmap);
             } else{
-                console.log('cant set marker:', item.sj, itme.adres);
+                console.log('cant set marker:', item.sj, item.adres);
             }
         });
     });
@@ -264,7 +265,80 @@ const dongData = {
 
 //DOM handler
 function cardModalCreate(item){
+    const modalMain = document.getElementsByClassName('modal_main');
+    modalMain[0].innerHTML = '';
+    const sdetail = document.createElement('div');
+    sdetail.className = 'store_detail';
+
+    const sname = document.getElementById('modal_storeName');
+    modalMain.innerHTML = '';
+    sname.textContent = item.sj;
+
+    const simg = document.createElement('img');
+    if(item.imgFile1){
+        simg.src = `https://${item.imgFile1}`;
+        simg.alt = item.imgName1;
+        simg.width = '400';
+        simg.height = '300';
+        sdetail.appendChild(simg);
+    } else if(item.imgFile2){
+        simg.src = `https://${item.imgFile2}`;
+        simg.alt = item.imgName2;
+        simg.width = '400';
+        simg.height = '300';
+        sdetail.appendChild(simg);
+    } else{
+        simg.src = 'media/no-image.jpg';
+        simg.alt = 'no image';
+        simg.width = '400';
+        simg.height = '300';
+        sdetail.appendChild(simg);
+    }
+
+    const cate = document.createElement('p');
+    const menu = document.createElement('p');
+    const price = document.createElement('p');
+    cate.className = 'category_detail';
+    if(item.cn === '음식점'){
+        const cn = document.createElement('p');
+        cn.className = 'category';
+        cn.textContent = '업종: 음식점';
+        sdetail.appendChild(cn);
+        if(item.cate === '기타양식'){
+            cate.textContent = '세부분류: 카페/디저트';
+            menu.textContent = `메뉴: ${item.menu}`;
+            price.textContent = `가격: ${item.pric}원`;
+        } else{
+            cate.textContent = item.cate? `세부분류: ${item.cate}`: '';
+            menu.textContent = `메뉴: ${item.menu}`;
+            price.textContent = `가격: ${item.pric}원`;
+        }
+        sdetail.appendChild(cate);
+        sdetail.appendChild(menu);
+        sdetail.appendChild(price);
+    } else{
+        cate.textContent = `업종: ${item.cn}`;
+        menu.textContent = `주요 서비스: ${item.menu}`;
+        price.textContent = `가격: ${item.pric}`;
+        sdetail.appendChild(cate);
+        sdetail.appendChild(menu);
+        sdetail.appendChild(price);
+    }
     
+    const tel = document.createElement('p');
+    tel.className = 'tel';
+    tel.textContent = item.tel? `Tel: ${item.tel}` : '';
+    sdetail.appendChild(tel);
+
+    if(item.intrcn != '<p><br></p>' || item.intrcn != ' ' || item.intrcn != '' || item.intrcn != '<p>&nbsp;</p>'){
+        const intrcn = document.createElement('div');
+        intrcn.className = 'store_introduction';
+        intrcn.innerHTML = item.intrcn;
+        intrcn.style.overflow = 'auto';
+        sdetail.appendChild(intrcn);
+    }
+
+    modalMain[0].appendChild(sdetail);
 }
 
 function showCateData(value){
@@ -455,6 +529,21 @@ let busanCenter = {
     }
 };
 
+function cardModalHandler(){
+    $('.card_header').click(function(){
+        console.log('show modal', $(this).text());
+        let targetData;
+        originData.some((el)=>{
+            if(el.sj === $(this).text()){
+                targetData = el;
+                return true;
+            }
+        });
+        cardModalCreate(targetData);
+        $('.card_modal').show();
+    });
+}
+
 //main
 $(document).ready(function() {
     fetchData();
@@ -479,9 +568,7 @@ $(document).ready(function() {
         console.log('filtered data: ', filteredData);
         //showFilteredMarker(filteredData);
         showFilteredData(filteredData);
-        $('.card_header').click(function(){
-            $('.card_modal').show();
-        });
+        cardModalHandler();
     }
 
     function filterFunction(filters){
@@ -544,6 +631,10 @@ $(document).ready(function() {
 
     $('#searchbtn').click(function() {
         processFilters();
+    });
+
+    $('.card_header').click(function(){
+        console.log('clicked');
     });
 
     $('#modal_closebtn').click(function(){

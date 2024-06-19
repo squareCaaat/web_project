@@ -271,7 +271,10 @@ section {
 
 .modal_popup #modal_closebtn{
     display: inline-block;
+    position: absolute;
     padding: 10px;
+    top: 2.5%;
+    right: 3%;
     background-color: rgb(116,0,0);
     border: none;
     border-radius: 5px;
