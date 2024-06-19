@@ -306,11 +306,11 @@ function cardModalCreate(item){
         sdetail.appendChild(cn);
         if(item.cate === '기타양식'){
             cate.textContent = '세부분류: 카페/디저트';
-            menu.textContent = `메뉴: ${item.menu}`;
+            menu.textContent = `주요 메뉴: ${item.menu}`;
             price.textContent = `가격: ${item.pric}원`;
         } else{
             cate.textContent = item.cate? `세부분류: ${item.cate}`: '';
-            menu.textContent = `메뉴: ${item.menu}`;
+            menu.textContent = `주요 메뉴: ${item.menu}`;
             price.textContent = `가격: ${item.pric}원`;
         }
         sdetail.appendChild(cate);
@@ -319,7 +319,7 @@ function cardModalCreate(item){
     } else{
         cate.textContent = `업종: ${item.cn}`;
         menu.textContent = `주요 서비스: ${item.menu}`;
-        price.textContent = `가격: ${item.pric}`;
+        price.textContent = `가격: ${item.pric}원`;
         sdetail.appendChild(cate);
         sdetail.appendChild(menu);
         sdetail.appendChild(price);
@@ -329,6 +329,14 @@ function cardModalCreate(item){
     tel.className = 'tel';
     tel.textContent = item.tel? `Tel: ${item.tel}` : '';
     sdetail.appendChild(tel);
+
+    const park = document.createElement('p');
+    if(item.parkngAt === 'Y'){
+        park.textContent = '주차 가능';
+    } else{
+        park.textContent = '주차 불가능';
+    }
+    sdetail.appendChild(park);
 
     if(item.intrcn != '<p><br></p>' || item.intrcn != ' ' || item.intrcn != '' || item.intrcn != '<p>&nbsp;</p>'){
         const intrcn = document.createElement('div');
