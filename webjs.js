@@ -295,6 +295,14 @@ function cardModalCreate(item){
         sdetail.appendChild(simg);
     }
 
+    const bsntime = document.createElement('p');
+    bsntime.textContent = item.bsntime? `영업 시간: ${item.bsntime}`: '영업 시간 정보 없음';
+    sdetail.appendChild(bsntime);
+
+    const adress = document.createElement('p');
+    adress.textContent = `주소: ${item.adres}`;
+    sdetail.appendChild(adress);
+
     const cate = document.createElement('p');
     const menu = document.createElement('p');
     const price = document.createElement('p');
