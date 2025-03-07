@@ -751,39 +751,10 @@ async function fetchData(){
             if(item.sj === '영선꼼장어,바다장어'){
                 item.sj = '영선꼼장어 바다장어';
             }
-        });
-        originCsv.forEach((el) => {
-            originData.forEach((item) => {
-                if(item.sj === el.sj){
-                    if(item.cn === '음식점'){
-                        item.cate = el.cate;
-                        item.menu = el.menu;
-                        item.pric = el.pric;
-                    } else if(item.cn === '이미용'){
-                        item.cn = el.cate;
-                        item.menu = el.menu;
-                        item.pric = el.pric;
-                    } else if(item.cn === '목욕'){
-                        item.cn = el.cate;
-                        item.menu = el.menu;
-                        item.pric = el.pric;
-                    } else if(item.cn === '기타'){
-                        item.cn = el.cate;
-                        item.menu = el.menu;
-                        item.pric = el.pric;
-                    } else{
-                        item.cn = el.cate;
-                        item.menu = el.menu;
-                        item.pric = el.pric;
-                    }
-                }
-            });
-        });
-        originData.forEach((el)=>{
             for(let id in dongData){
                 let dong = dongData[id];
                 dong.some((dg)=>{
-                    let eldg = el.locale.substring(0,2);
+                    let eldg = item.locale.substring(0,2);
                     let exp = /\d/;
                     if(eldg[1] == '동'){
                         eldg = eldg.substring(0,1);
@@ -791,11 +762,41 @@ async function fetchData(){
                         eldg = eldg[0];
                     }
                     if(dg.includes(eldg)){
-                        el.region = id;
+                        item.region = id;
                         return true;
                     }
                 });
             }
+            originCsv.some((el)=>{
+                if(item.sj === el.sj){
+                    if(item.cn === '음식점'){
+                        item.cate = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                        return true;
+                    } else if(item.cn === '이미용'){
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                        return true;
+                    } else if(item.cn === '목욕'){
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                        return true;
+                    } else if(item.cn === '기타'){
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                        return true;
+                    } else{
+                        item.cn = el.cate;
+                        item.menu = el.menu;
+                        item.pric = el.pric;
+                        return true;
+                    }
+                }
+            });
         });
         console.log('data init complete');
     })
